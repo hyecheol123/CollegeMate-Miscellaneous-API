@@ -55,7 +55,7 @@ export default class TnC implements publicTnC {
       .items.query<TnC>({
         query: String.prototype.concat(
           `SELECT TOP 1 * FROM ${TNC} as tnc `,
-          'WHERE tnc.public = true ORDER BY tnc.createdAt'
+          'WHERE tnc.public = true ORDER BY tnc.createdAt DESC'
         ),
       })
       .fetchAll();

@@ -86,37 +86,25 @@ export default class TestEnv {
     // termsAndCondition data
     const termsAndConditionSamples: TnC[] = [];
     // v1.0.0, 2021-03-10, public, "This is too old"
-    let tncTimestamp = new Date('2021-03-10T00:50:43.000Z');
-    termsAndConditionSamples.push({
-      id: 'v1.0.0',
-      createdAt: tncTimestamp,
-      public: true,
-      content: 'This is too old',
-    });
+    let tncTimestamp = new Date('2021-03-10T10:50:43.000Z');
+    termsAndConditionSamples.push(
+      new TnC('v1.0.0', tncTimestamp, true, 'This is too old')
+    );
     // v1.0.2, 2021-03-12, private, "This is too old, not public"
-    tncTimestamp = new Date('2021-03-12T01:15:42.000Z');
-    termsAndConditionSamples.push({
-      id: 'v1.0.2',
-      createdAt: tncTimestamp,
-      public: false,
-      content: 'This is too old, not public',
-    });
+    tncTimestamp = new Date('2021-03-12T10:15:42.000Z');
+    termsAndConditionSamples.push(
+      new TnC('v1.0.2', tncTimestamp, false, 'This is too old, not public')
+    );
     // v2.0.0, 2023-03-12, public, "Terms and Condition"
-    tncTimestamp = new Date('2023-03-12T01:15:42.000Z');
-    termsAndConditionSamples.push({
-      id: 'v2.0.0',
-      createdAt: tncTimestamp,
-      public: true,
-      content: 'Terms and Condition',
-    });
+    tncTimestamp = new Date('2023-03-12T10:15:42.000Z');
+    termsAndConditionSamples.push(
+      new TnC('v2.0.0', tncTimestamp, true, 'Terms and Condition')
+    );
     // v2.0.1, 2023-03-15, private, "This is not public"
-    tncTimestamp = new Date('2023-03-15T01:15:42.000Z');
-    termsAndConditionSamples.push({
-      id: 'v2.0.1',
-      createdAt: tncTimestamp,
-      public: false,
-      content: 'This is not public',
-    });
+    tncTimestamp = new Date('2023-03-15T10:15:42.000Z');
+    termsAndConditionSamples.push(
+      new TnC('v2.0.1', tncTimestamp, false, 'This is not public')
+    );
     for (let index = 0; index < termsAndConditionSamples.length; ++index) {
       await this.dbClient
         .container('termsAndCondition')
