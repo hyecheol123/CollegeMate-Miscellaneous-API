@@ -33,7 +33,7 @@
     "lint": "gts lint",
     "lint:fix": "gts fix",
     "pretest": "npm run build",
-    "test": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 jest --coverage --detectOpenHandles --forceExit --errorOnDeprecated",
+    "test": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 jest --coverage --detectOpenHandles --forceExit --errorOnDeprecated --runInBand",
     "posttest": "npm run lint",
     "prestart": "npm run build",
     "start": "node dist/main.js"

@@ -14,14 +14,14 @@ import ForbiddenError from '../exceptions/ForbiddenError';
 const tncRouter = express.Router();
 
 // GET: /tnc
-tncRouter.get('/tnc', async (req, res, next) => {
+tncRouter.get('/', async (req, res, next) => {
   const dbClient: Cosmos.Database = req.app.locals.dbClient;
 
   try {
     // Check Origin or Application Key
     if (
       req.header('Origin') !== req.app.get('webpageOrigin') &&
-      !req.app.get('applicationKey').include(req.header('X-APPLICATION-KEY'))
+      !req.app.get('applicationKey').includes(req.header('X-APPLICATION-KEY'))
     ) {
       throw new ForbiddenError();
     }
