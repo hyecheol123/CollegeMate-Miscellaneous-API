@@ -28,8 +28,11 @@ jobs:
       - uses: actions/checkout@v2
 
       # Enable Cosmos DB Emulator
-      - name: Azure Cosmos DB Emulator
-        uses: southpolesteve/cosmos-emulator-github-action@v1
+      - name: Enable Cosmos DB Emulator
+        run: |
+          Write-Host "Launching Cosmos DB Emulator"
+          Import-Module "$env:ProgramFiles\Azure Cosmos DB Emulator\PSModules\Microsoft.Azure.CosmosDB.Emulator"
+          Start-CosmosDbEmulator -NoFirewall
 
       # Install Node.JS
       - name: Setup Node.js
