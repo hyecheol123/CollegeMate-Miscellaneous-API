@@ -47,7 +47,6 @@ jobs:
       - name: Copy Config Files
         run : |
           Copy-Item -Path ".\src\ServerConfigExample.ts" -Destination ".\src\ServerConfig.ts"
-          Copy-Item -Path ".\test\TestConfigExample.ts" -Destination ".\test\TestConfig.ts"
       
       # Lint
       - name: Lint / Code Style Checks

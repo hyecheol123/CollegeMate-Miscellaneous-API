@@ -40,11 +40,7 @@ export default class TestEnv {
       .digest('hex');
 
     // Generate TestConfig obj
-    this.testConfig = new TestConfig(
-      this.dbIdentifier,
-      process.env.DB_ENDPOINT,
-      process.env.DB_KEY
-    );
+    this.testConfig = new TestConfig(this.dbIdentifier);
   }
 
   /**
