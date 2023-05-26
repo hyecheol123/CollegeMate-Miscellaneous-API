@@ -61,7 +61,6 @@ export default class TestEnv {
     const dbOps = await dbClient.databases.create({
       id: this.testConfig.db.databaseId,
     });
-    console.log(dbOps);
     /* istanbul ignore next */
     if (dbOps.statusCode !== 201) {
       throw new Error(JSON.stringify(dbOps));
@@ -75,8 +74,8 @@ export default class TestEnv {
       indexingPolicy: {
         indexingMode: 'consistent',
         automatic: true,
-        includedPaths: [{ path: '/*' }],
-        excludedPaths: [{ path: '/content/?' }, { path: '/"_etag"/?' }],
+        includedPaths: [{path: '/*'}],
+        excludedPaths: [{path: '/content/?'}, {path: '/"_etag"/?'}],
       },
     });
     /* istanbul ignore next */

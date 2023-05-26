@@ -14,7 +14,7 @@ describe('General Behaviors', () => {
 
   beforeEach(async () => {
     // Setup TestEnv
-    testEnv = new TestEnv((expect.getState().currentTestName) as string);
+    testEnv = new TestEnv(expect.getState().currentTestName as string);
 
     // Start Test Environment
     await testEnv.start();

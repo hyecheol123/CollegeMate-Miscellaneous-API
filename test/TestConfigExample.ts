@@ -1,68 +1,145 @@
 /**
- * Configuration for the Test Environment.
- * Work identical as ServerConfig of src.
- * 
- * TestConfig.ts contain ip address specific to the machine.
- * The file should be ignored from the version control.
- * 
- * - For WSL: grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'
+ * Setup test environment
+ *  - Setup Database for testing
+ *  - Build table that will be used during the testing
+ *  - Setup express server
  *
- * @author Hyecheol (Jerry) Jang
+ * Teardown test environment after test
+ *  - Remove used table and close database connection from the express server
+ *
+ * @author Hyecheol (Jerry) Jang <hyecheol123@gmail.com>
  */
 
 import * as crypto from 'crypto';
-import { ConfigObj } from '../src/datatypes/ConfigObj';
-import ServerConfigTemplate from '../src/ServerConfigTemplate';
+import * as Cosmos from '@azure/cosmos';
+import TestConfig from './TestConfig';
+import ExpressServer from '../src/ExpressServer';
+import TnC from '../src/datatypes/termsAndCondition/TnC';
 
 /**
- * Module contains the configuration
+ * Class for Test Environment
  */
-export default class TestConfig extends ServerConfigTemplate {
+export default class TestEnv {
+  testConfig: TestConfig; // Configuration Object (to use hash function later)
+  expressServer: ExpressServer | undefined; // Express Server Object
+  dbClient: Cosmos.Database | undefined; // DB Client Object
+  dbIdentifier: string; // unique identifier string for the database
+
   /**
-   * Constructor for ServerConfig
+   * Constructor for TestEnv
+   *  - Setup express server
+   *  - Setup db client
    *
-   * @param identifier test name / used to identify test cases
-   * @param endpoint {string | undefined} url of server endpoint
-   * @param dbKey {string | undefined} key used to access Azure Cosmos DB
+   * @param identifier Identifier to specify the test
    */
-  constructor(
-    identifier: string,
-    endpoint?: string | undefined,
-    dbKey?: string | undefined
-  ) {
-    const config: ConfigObj = {
-      db: {
-        endpoint: /* istanbul ignore next */ endpoint
-          ? endpoint
-          : 'https://localhost:8081',
-        key: /* istanbul ignore next */ dbKey
-          ? dbKey
-          : 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==',
-        databaseId: `db_${identifier}`,
-      },
-      expressPort: 3000,
-      webpageOrigin: 'https://collegemate.app',
-      applicationKey: ['<Android-App-v1>', '<iOS-App-v1>'],
-    };
-    super(config);
+  constructor(identifier: string) {
+    // Hash identifier to create new identifier string
+    this.dbIdentifier = crypto
+      .createHash('md5')
+      .update(identifier)
+      .digest('hex');
+
+    // Generate TestConfig obj
+    this.testConfig = new TestConfig(
+      this.dbIdentifier,
+      process.env.DB_ENDPOINT,
+      process.env.DB_KEY
+    );
   }
 
   /**
-   * Function to create hashed password
-   *
-   * @param id user's id (used to generate salt)
-   * @param additionalSalt unique additional salt element for each user
-   * @param secretString string to be hashed (password, etc)
-   * @returns {string} Hashed Password
+   * beforeEach test case, run this function
+   * - Setup Database for testing
+   * - Build table that will be used during the testing
    */
-  static hash(
-    id: crypto.BinaryLike,
-    additionalSalt: crypto.BinaryLike,
-    secretString: crypto.BinaryLike
-  ): string {
-    const salt: crypto.BinaryLike = id.toString() + additionalSalt.toString();
-    return crypto
-      .pbkdf2Sync(secretString, salt, 10, 64, 'sha512')
-      .toString('base64url');
+  async start(): Promise<void> {
+    // Setup DB
+    const dbClient = new Cosmos.CosmosClient({
+      endpoint: this.testConfig.db.endpoint,
+      key: this.testConfig.db.key,
+    });
+    const dbOps = await dbClient.databases.create({
+      id: this.testConfig.db.databaseId,
+    });
+    /* istanbul ignore next */
+    if (dbOps.statusCode !== 201) {
+      throw new Error(JSON.stringify(dbOps));
+    }
+    this.dbClient = dbClient.database(this.testConfig.db.databaseId);
+
+    // Create resources
+    // termsAndCondition container
+    const containerOps = await this.dbClient.containers.create({
+      id: 'termsAndCondition',
+      indexingPolicy: {
+        indexingMode: 'consistent',
+        automatic: true,
+        includedPaths: [{path: '/*'}],
+        excludedPaths: [{path: '/content/?'}, {path: '/"_etag"/?'}],
+      },
+    });
+    /* istanbul ignore next */
+    if (containerOps.statusCode !== 201) {
+      throw new Error(JSON.stringify(containerOps));
+    }
+
+    // termsAndCondition data
+    const termsAndConditionSamples: TnC[] = [];
+    // v1.0.0, 2021-03-10, public, "This is too old"
+    let tncTimestamp = new Date('2021-03-10T00:50:43.000Z');
+    termsAndConditionSamples.push({
+      id: 'v1.0.0',
+      createdAt: tncTimestamp,
+      public: true,
+      content: 'This is too old',
+    });
+    // v1.0.2, 2021-03-12, private, "This is too old, not public"
+    tncTimestamp = new Date('2021-03-12T01:15:42.000Z');
+    termsAndConditionSamples.push({
+      id: 'v1.0.2',
+      createdAt: tncTimestamp,
+      public: false,
+      content: 'This is too old, not public',
+    });
+    // v2.0.0, 2023-03-12, public, "Terms and Condition"
+    tncTimestamp = new Date('2023-03-12T01:15:42.000Z');
+    termsAndConditionSamples.push({
+      id: 'v2.0.0',
+      createdAt: tncTimestamp,
+      public: true,
+      content: 'Terms and Condition',
+    });
+    // v2.0.1, 2023-03-15, private, "This is not public"
+    tncTimestamp = new Date('2023-03-15T01:15:42.000Z');
+    termsAndConditionSamples.push({
+      id: 'v2.0.1',
+      createdAt: tncTimestamp,
+      public: false,
+      content: 'This is not public',
+    });
+    for (let index = 0; index < termsAndConditionSamples.length; ++index) {
+      await this.dbClient
+        .container('termsAndCondition')
+        .items.create(termsAndConditionSamples[index]);
+    }
+
+    // Setup Express Server
+    this.expressServer = new ExpressServer(this.testConfig);
+  }
+
+  /**
+   * Teardown test environment after test
+   *  - Remove used resources (DB)
+   *  - close database/redis connection from the express server
+   */
+  async stop(): Promise<void> {
+    // Drop database
+    await (this.dbClient as Cosmos.Database).delete();
+
+    // Close database connection of the express server
+    await (this.expressServer as ExpressServer).closeServer();
+
+    // Close database connection used during tests
+    await (this.dbClient as Cosmos.Database).client.dispose();
   }
 }
