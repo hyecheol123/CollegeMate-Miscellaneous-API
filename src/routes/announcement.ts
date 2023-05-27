@@ -32,7 +32,7 @@ announcementRouter.get('/', async (req, res, next) => {
 
     // Response
     const announcementList: AnnouncementListResponseObj['announcementList'] =
-      availableAnnouncements.length === 0
+      availableAnnouncements.length !== 0
         ? availableAnnouncements.map(data => ({
             id: data.id,
             title: data.title,

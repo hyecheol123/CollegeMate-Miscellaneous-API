@@ -15,6 +15,7 @@ import * as Cosmos from '@azure/cosmos';
 import TestConfig from './TestConfig';
 import ExpressServer from '../src/ExpressServer';
 import TnC from '../src/datatypes/termsAndCondition/TnC';
+import Announcement from '../src/datatypes/announcement/Announcement';
 
 /**
  * Class for Test Environment
@@ -65,7 +66,7 @@ export default class TestEnv {
 
     // Create resources
     // termsAndCondition container
-    const containerOps = await this.dbClient.containers.create({
+    let containerOps = await this.dbClient.containers.create({
       id: 'termsAndCondition',
       indexingPolicy: {
         indexingMode: 'consistent',
@@ -105,6 +106,121 @@ export default class TestEnv {
       await this.dbClient
         .container('termsAndCondition')
         .items.create(termsAndConditionSamples[index]);
+    }
+
+    // announcement container
+    containerOps = await this.dbClient.containers.create({
+      id: 'announcement',
+      indexingPolicy: {
+        indexingMode: 'consistent',
+        automatic: true,
+        includedPaths: [{path: '/*'}],
+        excludedPaths: [
+          {path: '/title/?'},
+          {path: '/content/?'},
+          {path: '/"_etag"/?'},
+        ],
+      },
+    });
+    /* istanbul ignore next */
+    if (containerOps.statusCode !== 201) {
+      throw new Error(JSON.stringify(containerOps));
+    }
+
+    // announcement data
+    const announcementSamples: Announcement[] = [];
+    // "Beta Testing", "We are still developing features, comments and reviews are welcome", 2021-03-10, 2100-12-31
+    let title = 'Beta Testing';
+    let content =
+      'We are still developing features, comments and reviews are welcome';
+    let createdAtAnnouncementTimestamp = new Date('2021-03-10T10:50:43.000Z');
+    let expiresAtAnnouncementTimestamp = new Date('2100-12-31T10:50:43.000Z');
+    announcementSamples.push(
+      new Announcement(
+        TestConfig.hash(
+          'announcement',
+          createdAtAnnouncementTimestamp.toISOString(),
+          `${title} + ${content}`
+        ),
+        title,
+        content,
+        createdAtAnnouncementTimestamp,
+        expiresAtAnnouncementTimestamp
+      )
+    );
+    // Expired Announcement
+    // "Testing", "Announcement Test", 2021-02-10, 2021-02-11
+    title = 'Testing';
+    content = 'Announcement Test';
+    createdAtAnnouncementTimestamp = new Date('2021-02-10T10:50:43.000Z');
+    expiresAtAnnouncementTimestamp = new Date('2021-02-11T10:50:43.000Z');
+    announcementSamples.push(
+      new Announcement(
+        TestConfig.hash(
+          'announcement',
+          createdAtAnnouncementTimestamp.toISOString(),
+          `${title} + ${content}`
+        ),
+        title,
+        content,
+        createdAtAnnouncementTimestamp,
+        expiresAtAnnouncementTimestamp
+      )
+    );
+    // About to Expire Announcement
+    // "Temp Announcement", "Temporary Announcement", <Yesterday>, <Tomorrow>
+    title = 'Temp Announcement';
+    content = 'Temporary Announcement';
+    createdAtAnnouncementTimestamp = new Date();
+    createdAtAnnouncementTimestamp.setDate(
+      createdAtAnnouncementTimestamp.getDate() - 1
+    );
+    expiresAtAnnouncementTimestamp = new Date();
+    expiresAtAnnouncementTimestamp.setDate(
+      expiresAtAnnouncementTimestamp.getDate() + 1
+    );
+    announcementSamples.push(
+      new Announcement(
+        TestConfig.hash(
+          'announcement',
+          createdAtAnnouncementTimestamp.toISOString(),
+          `${title} + ${content}`
+        ),
+        title,
+        content,
+        createdAtAnnouncementTimestamp,
+        expiresAtAnnouncementTimestamp
+      )
+    );
+    // Just Expired Announcement
+    // "Expired Announcement", "Just Expired", <2 Days ago>, <Yesterday>
+    title = 'Expired Announcement';
+    content = 'Just Expired';
+    createdAtAnnouncementTimestamp = new Date();
+    createdAtAnnouncementTimestamp.setDate(
+      createdAtAnnouncementTimestamp.getDate() - 2
+    );
+    expiresAtAnnouncementTimestamp = new Date();
+    expiresAtAnnouncementTimestamp.setDate(
+      expiresAtAnnouncementTimestamp.getDate() - 1
+    );
+    announcementSamples.push(
+      new Announcement(
+        TestConfig.hash(
+          'announcement',
+          createdAtAnnouncementTimestamp.toISOString(),
+          `${title} + ${content}`
+        ),
+        title,
+        content,
+        createdAtAnnouncementTimestamp,
+        expiresAtAnnouncementTimestamp
+      )
+    );
+    for (let index = 0; index < announcementSamples.length; ++index) {
+      await this.dbClient
+        .container('announcement')
+        .items.create(announcementSamples[index]);
     }
 
     // Setup Express Server

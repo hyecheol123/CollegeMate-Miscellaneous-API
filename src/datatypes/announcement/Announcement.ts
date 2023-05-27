@@ -44,7 +44,8 @@ export default class Announcement {
       .items.query<Announcement>({
         query: String.prototype.concat(
           `SELECT * FROM ${ANNOUNCEMENT} `,
-          `WHERE ${ANNOUNCEMENT}.expiresAt >= GetCurrentDateTime()`
+          `WHERE ${ANNOUNCEMENT}.expireAt >= GetCurrentDateTime() `,
+          `ORDER BY ${ANNOUNCEMENT}.createdAt ASC`
         ),
       })
       .fetchAll();
