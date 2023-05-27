@@ -80,7 +80,7 @@ jobs:
           $HostAddress = "https://$(@($IPAddress.IPAddress)):8081"
           Write-Host "Connect to ${HostAddress}"
 
-          echo "COSMOS_EMULATOR_ENDPOINT=${HostAddress}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+          echo "COSMOS_EMULATOR_ENDPOINT=https://127.0.0.1:8081" >> $env:GITHUB_ENV
 
       # Run Tests
       - name: Test
