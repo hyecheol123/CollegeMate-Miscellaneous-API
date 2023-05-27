@@ -35,6 +35,7 @@
     "pretest": "npm run build",
     "test": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 jest --coverage --detectOpenHandles --forceExit --errorOnDeprecated --runInBand",
     "posttest": "npm run lint",
+    "test:local": "cross-env COSMOS_EMULATOR_ENDPOINT=https://localhost:8081 npm test",
     "prestart": "npm run build",
     "start": "node dist/main.js"
   },

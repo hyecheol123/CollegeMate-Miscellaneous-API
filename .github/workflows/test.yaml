@@ -54,6 +54,9 @@ jobs:
             IPAddress = $IPAddress.IPAddress
           }
 
+          $HostAddress = "https://$(@($IPAddress.IPAddress)):8081"
+          Write-Host "Connect to ${HostAddress}"
+
       # Install Node.JS
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -79,6 +82,6 @@ jobs:
           
       # Test
       - name: Test Runs
-        run: npm test
+        run: $env:COSMOS_EMULATOR_ENDPOINT = ${HostAddress}; npm test
         env:
           CI: true

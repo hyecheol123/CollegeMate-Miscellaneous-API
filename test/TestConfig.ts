@@ -9,7 +9,7 @@
  */
 
 import * as crypto from 'crypto';
-import {ConfigObj} from '../src/datatypes/ConfigObj';
+import { ConfigObj } from '../src/datatypes/ConfigObj';
 import ServerConfigTemplate from '../src/ServerConfigTemplate';
 
 /**
@@ -24,7 +24,7 @@ export default class TestConfig extends ServerConfigTemplate {
   constructor(identifier: string) {
     const config: ConfigObj = {
       db: {
-        endpoint: 'https://localhost:8081',
+        endpoint: process.env.COSMOS_EMULATOR_ENDPOINT as string,
         key: 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==',
         databaseId: `db_${identifier}`,
       },
