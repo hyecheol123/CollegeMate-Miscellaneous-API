@@ -51,7 +51,7 @@ jobs:
           CI: true
 
       # Enable Cosmos DB Emulator
-      - name: Enable Cosmos DB Emulator
+      - name: Enable Cosmos DB Emulator and Run Test
         run: |
           Write-Host "Downgrade Cosmos DB Emulator"
           Import-Module "$env:ProgramFiles\Azure Cosmos DB Emulator\PSModules\Microsoft.Azure.CosmosDB.Emulator"
@@ -79,9 +79,11 @@ jobs:
 
           $HostAddress = "https://$(@($IPAddress.IPAddress)):8081"
           Write-Host "Connect to ${HostAddress}"
-          
-      # Test
-      - name: Test Runs
-        run: $env:COSMOS_EMULATOR_ENDPOINT = ${HostAddress}; npm test
+
+          echo "COSMOS_EMULATOR_ENDPOINT=${HostAddress}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+      # Run Tests
+      - name: Test
+        run: npm test
         env:
           CI: true
