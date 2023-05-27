@@ -9,7 +9,7 @@
  */
 
 import * as crypto from 'crypto';
-import { ConfigObj } from '../src/datatypes/ConfigObj';
+import {ConfigObj} from '../src/datatypes/ConfigObj';
 import ServerConfigTemplate from '../src/ServerConfigTemplate';
 
 /**
