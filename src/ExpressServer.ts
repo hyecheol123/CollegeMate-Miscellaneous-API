@@ -9,6 +9,7 @@ import {CosmosClient} from '@azure/cosmos';
 import ServerConfig from './ServerConfig';
 import HTTPError from './exceptions/HTTPError';
 import tncRouter from './routes/tnc';
+import announcementRouter from './routes/announcement';
 
 /**
  * Class contains Express Application and other relevant instances/functions
@@ -56,6 +57,7 @@ export default class ExpressServer {
 
     // Routers
     this.app.use('/tnc', tncRouter);
+    this.app.use('/announcement', announcementRouter);
 
     // Default Error Handler
     this.app.use(
