@@ -9,7 +9,7 @@
  */
 
 import * as crypto from 'crypto';
-import {ConfigObj} from '../src/datatypes/ConfigObj';
+import { ConfigObj } from '../src/datatypes/ConfigObj';
 import ServerConfigTemplate from '../src/ServerConfigTemplate';
 
 /**
@@ -32,7 +32,6 @@ export default class TestConfig extends ServerConfigTemplate {
       webpageOrigin: 'https://collegemate.app',
       applicationKey: ['<Android-App-v1>', '<iOS-App-v1>'],
     };
-    console.log(process.env.COSMOS_EMULATOR_ENDPOINT as string);
     super(config);
   }
 
