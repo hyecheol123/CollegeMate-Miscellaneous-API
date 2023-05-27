@@ -32,6 +32,7 @@ export default class TestConfig extends ServerConfigTemplate {
       webpageOrigin: 'https://collegemate.app',
       applicationKey: ['<Android-App-v1>', '<iOS-App-v1>'],
     };
+    console.log(process.env.COSMOS_EMULATOR_ENDPOINT as string);
     super(config);
   }
 
