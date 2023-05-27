@@ -27,6 +27,29 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      # Install Node.JS
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18' # Using latest LTS
+
+      # Install Dependencies
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          CI: true 
+      
+      # Copy required files
+      - name: Copy Config Files
+        run : |
+          Copy-Item -Path ".\src\ServerConfigExample.ts" -Destination ".\src\ServerConfig.ts"
+      
+      # Lint
+      - name: Lint / Code Style Checks
+        run: npm run lint
+        env:
+          CI: true
+
       # Enable Cosmos DB Emulator
       - name: Enable Cosmos DB Emulator
         run: |
@@ -56,29 +79,6 @@ jobs:
 
           $HostAddress = "https://$(@($IPAddress.IPAddress)):8081"
           Write-Host "Connect to ${HostAddress}"
-
-      # Install Node.JS
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18' # Using latest LTS
-
-      # Install Dependencies
-      - name: Install Dependencies
-        run: npm ci
-        env:
-          CI: true 
-      
-      # Copy required files
-      - name: Copy Config Files
-        run : |
-          Copy-Item -Path ".\src\ServerConfigExample.ts" -Destination ".\src\ServerConfig.ts"
-      
-      # Lint
-      - name: Lint / Code Style Checks
-        run: npm run lint
-        env:
-          CI: true
           
       # Test
       - name: Test Runs
