@@ -1,5 +1,5 @@
 /**
- * Define type and used CRUD methods for each major entry
+ * Define type and used CRUD methods for each majorlist entry
  *
  * @author Seok-Hee (Steve) Han <seokheehan01@gmail.com>
  */

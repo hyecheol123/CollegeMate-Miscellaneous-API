@@ -6,9 +6,11 @@
 
 import * as express from 'express';
 import * as Cosmos from '@azure/cosmos';
-import MajorList from '../datatypes/major/MajorList';
-import MajorListResponseObj from '../datatypes/major/MajorListResponseObj';
+import MajorList from '../datatypes/majorlist/MajorList';
+import MajorListResponseObj from '../datatypes/majorlist/MajorListResponseObj';
 import ForbiddenError from '../exceptions/ForbiddenError';
+import BadRequestError from '../exceptions/BadRequestError';
+import {validateMajorListRequest} from '../functions/inputValidator/validateMajorListRequest';
 
 // Path: /majorlist
 const majorlistRouter = express.Router();
@@ -25,10 +27,14 @@ majorlistRouter.get('/', async (req, res, next) => {
     ) {
       throw new ForbiddenError();
     }
-
+    
+    // if school domain is not provided
+    if (!validateMajorListRequest(req.body as {schoolDomain: string})) {
+      throw new BadRequestError();
+    }
     // TODO: Change this to appropriate id (placeholder for now)
     // need to update API Documentation for schoolDomain
-    const id: string = req.body.schoolDomain;
+    const id: string = (req.body as {schoolDomain: string}).schoolDomain;
 
     // DB Operations
     const majorlist = await MajorList.read(dbClient, id);

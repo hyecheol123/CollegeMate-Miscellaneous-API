@@ -15,6 +15,7 @@ import * as Cosmos from '@azure/cosmos';
 import TestConfig from './TestConfig';
 import ExpressServer from '../src/ExpressServer';
 import TnC from '../src/datatypes/termsAndCondition/TnC';
+import MajorList from '../src/datatypes/majorlist/MajorList';
 
 /**
  * Class for Test Environment
@@ -79,6 +80,21 @@ export default class TestEnv {
       throw new Error(JSON.stringify(containerOps));
     }
 
+    // majorlist container
+    const containerOps1 = await this.dbClient.containers.create({
+      id: 'majorlist',
+      indexingPolicy: {
+        indexingMode: 'consistent',
+        automatic: true,
+        includedPaths: [{path: '/*'}],
+        excludedPaths: [{path: '/content/?'}, {path: '/"_etag"/?'}],
+      },
+    });
+    /* istanbul ignore next */
+    if (containerOps1.statusCode !== 201) {
+      throw new Error(JSON.stringify(containerOps1));
+    }
+
     // termsAndCondition data
     const termsAndConditionSamples: TnC[] = [];
     // v1.0.0, 2021-03-10, public, "This is too old"
@@ -105,6 +121,26 @@ export default class TestEnv {
       await this.dbClient
         .container('termsAndCondition')
         .items.create(termsAndConditionSamples[index]);
+    }
+
+    // majorlist data
+    const majorlistSamples: MajorList[] = [];
+    // wisc.edu, randomhashstring, 2021-01-02, ["Computer Science", "ECE", "Animal Science", "Physics"]
+    majorlistSamples.push(
+      new MajorList('wisc.edu', 'randomhashstring', new Date('2021-01-02'), ['Computer Science', 'ECE', 'Animal Science', 'Physics'])
+    );
+    // uw.edu, superhashstring, 2022-03-12, ["Computer Science", "ECE", "Math"]
+    majorlistSamples.push(
+      new MajorList('uw.edu', 'superhashstring', new Date('2022-03-12'), [ 'Computer Science', 'ECE', 'Math' ])
+    );
+    // liberty.edu, hashhash, 2022-09-21, ["Computer Science", "ECE", "Math", "Physics"]
+    majorlistSamples.push(
+      new MajorList('liberty.edu', 'hashhash', new Date('2022-09-21'), [ 'Computer Science', 'ECE', 'Math', 'Physics' ])
+    );
+    for (let index = 0; index < majorlistSamples.length; ++index) {
+      await this.dbClient
+        .container('majorlist')
+        .items.create(majorlistSamples[index]);
     }
 
     // Setup Express Server
