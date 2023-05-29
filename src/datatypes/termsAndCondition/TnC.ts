@@ -46,7 +46,7 @@ export default class TnC implements publicTnC {
   /**
    * Retrieve the most recent public Terms and Condition form DB
    *
-   * @param dbClient {Cosmos.Database} Cosmos DB Client
+   * @param {Cosmos.Database} dbClient Cosmos DB Client
    */
   static async readRecentPublic(dbClient: Cosmos.Database): Promise<TnC> {
     // Query
