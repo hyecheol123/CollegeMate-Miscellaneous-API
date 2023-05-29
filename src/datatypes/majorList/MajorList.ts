@@ -27,11 +27,14 @@ export default class MajorList {
    * Retrieve all majors from DB
    *
    * @param {Cosmos.Database} dbClient Cosmos DB Client
-   * @param {string} id school domain
+   * @param {string} schoolDomain school domain
    */
-  static async read(dbClient: Cosmos.Database, id: string): Promise<MajorList> {
+  static async read(
+    dbClient: Cosmos.Database,
+    schoolDomain: string
+  ): Promise<MajorList> {
     // Query that finds id with school domain
-    const dbOps = await dbClient.container(MAJORLIST).item(id).read();
+    const dbOps = await dbClient.container(MAJORLIST).item(schoolDomain).read();
 
     if (dbOps.statusCode === 404) {
       throw new NotFoundError();

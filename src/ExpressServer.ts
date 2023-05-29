@@ -76,6 +76,7 @@ export default class ExpressServer {
       ): void => {
         /* istanbul ignore next */
         if (!(err instanceof HTTPError)) {
+          console.error(err);
           err = new HTTPError(500, 'Server Error');
         }
         res.status((err as HTTPError).statusCode).json({error: err.message});
