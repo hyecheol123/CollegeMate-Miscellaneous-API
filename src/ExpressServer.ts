@@ -9,6 +9,7 @@ import {CosmosClient} from '@azure/cosmos';
 import ServerConfig from './ServerConfig';
 import HTTPError from './exceptions/HTTPError';
 import tncRouter from './routes/tnc';
+import majorlistRouter from './routes/majorlist';
 
 /**
  * Class contains Express Application and other relevant instances/functions
@@ -24,6 +25,7 @@ export default class ExpressServer {
   constructor(config: ServerConfig) {
     // Setup Express Application
     this.app = express();
+    this.app.use(express.json()); // for parsing application/json
     // Create DB Connection pool and link to the express application
     this.app.locals.dbClient = new CosmosClient({
       endpoint: config.db.endpoint,
@@ -56,6 +58,7 @@ export default class ExpressServer {
 
     // Routers
     this.app.use('/tnc', tncRouter);
+    this.app.use('/majorlist', majorlistRouter);
 
     // Default Error Handler
     this.app.use(
