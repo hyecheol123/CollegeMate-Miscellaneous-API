@@ -68,6 +68,18 @@ describe('GET /majorlist - Get Major List', () => {
     expect(response.body.error).toBe('Bad Request');
   });
 
+  test('Fail - Request without required properties', async () => {
+    testEnv.expressServer = testEnv.expressServer as ExpressServer;
+
+    // Request
+    const response = await request(testEnv.expressServer.app)
+      .get('/majorlist')
+      .set({Origin: 'https://collegemate.app'})
+      .send({schoolDomainAbc: 'wisc.edu'});
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Bad Request');
+  });
+
   test('Fail - Request with not existing school property', async () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
 
