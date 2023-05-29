@@ -9,10 +9,8 @@ import Ajv from 'ajv';
 export const validateMajorListGetRequest = new Ajv().compile({
   type: 'object',
   properties: {
-    schoolDomain: {
-      type: 'string',
-    },
-    requred: ['schoolDomain'],
+    schoolDomain: {type: 'string'},
   },
+  required: ['schoolDomain'],
   additionalProperties: false,
 });
