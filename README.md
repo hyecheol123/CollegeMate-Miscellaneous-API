@@ -46,7 +46,57 @@ Data Diagram
 <details>
   <summary>Click to see configurations of each collection.</summary>
 
-  *To be added*
+  Configuration of `majorList` Collection
+
+```JavaScript
+{
+  id: 'majorList',
+  indexingPolicy: {
+    indexingMode: 'consistent',
+    automatic: true,
+    includedPaths: [{path: '/*'}],
+    excludedPaths: [
+      {path: '/hash/?'},
+      {path: '/major/?'},
+      {path: '/lastChecked/?'},
+      {path: '/"_etag"/?'},
+    ],
+  },
+}
+```
+
+Configuration of `termsAndCondition` Collection
+
+```JavaScript
+{
+  id: 'termsAndCondition',
+  indexingPolicy: {
+    indexingMode: 'consistent',
+    automatic: true,
+    includedPaths: [{path: '/*'}],
+    excludedPaths: [{path: '/content/?'}, {path: '/"_etag"/?'}],
+  }
+}
+```
+
+Configuration of `announcement` Collection
+
+```JavaScript
+{
+  id: 'announcement',
+  indexingPolicy: {
+    indexingMode: 'consistent',
+    automatic: true,
+    includedPaths: [{path: '/*'}],
+    excludedPaths: [
+      {path: '/title/?'},
+      {path: '/content/?'},
+      {path: '/"_etag"/?'},
+    ],
+  },
+}
+```
+
 </details>
 
 [Express](https://expressjs.com/) is a web framework for node.js.
