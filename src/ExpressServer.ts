@@ -10,6 +10,7 @@ import ServerConfig from './ServerConfig';
 import HTTPError from './exceptions/HTTPError';
 import tncRouter from './routes/tnc';
 import announcementRouter from './routes/announcement';
+import majorlistRouter from './routes/majorList';
 
 /**
  * Class contains Express Application and other relevant instances/functions
@@ -25,6 +26,7 @@ export default class ExpressServer {
   constructor(config: ServerConfig) {
     // Setup Express Application
     this.app = express();
+
     // Create DB Connection pool and link to the express application
     this.app.locals.dbClient = new CosmosClient({
       endpoint: config.db.endpoint,
@@ -51,6 +53,9 @@ export default class ExpressServer {
       }
     );
 
+    // Setup Parser
+    this.app.use(express.json());
+
     // Origin and Application Key
     this.app.set('webpageOrigin', config.webpageOrigin);
     this.app.set('applicationKey', config.applicationKey);
@@ -58,6 +63,7 @@ export default class ExpressServer {
     // Routers
     this.app.use('/tnc', tncRouter);
     this.app.use('/announcement', announcementRouter);
+    this.app.use('/majorlist', majorlistRouter);
 
     // Default Error Handler
     this.app.use(
