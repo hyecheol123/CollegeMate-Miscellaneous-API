@@ -72,8 +72,8 @@ export default class TestEnv {
       indexingPolicy: {
         indexingMode: 'consistent',
         automatic: true,
-        includedPaths: [{ path: '/*' }],
-        excludedPaths: [{ path: '/content/?' }, { path: '/"_etag"/?' }],
+        includedPaths: [{path: '/*'}],
+        excludedPaths: [{path: '/content/?'}, {path: '/"_etag"/?'}],
       },
     });
     /* istanbul ignore next */
@@ -115,11 +115,11 @@ export default class TestEnv {
       indexingPolicy: {
         indexingMode: 'consistent',
         automatic: true,
-        includedPaths: [{ path: '/*' }],
+        includedPaths: [{path: '/*'}],
         excludedPaths: [
-          { path: '/title/?' },
-          { path: '/content/?' },
-          { path: '/"_etag"/?' },
+          {path: '/title/?'},
+          {path: '/content/?'},
+          {path: '/"_etag"/?'},
         ],
       },
     });
@@ -230,12 +230,12 @@ export default class TestEnv {
       indexingPolicy: {
         indexingMode: 'consistent',
         automatic: true,
-        includedPaths: [{ path: '/*' }],
+        includedPaths: [{path: '/*'}],
         excludedPaths: [
-          { path: '/hash/?' },
-          { path: '/major/?' },
-          { path: '/lastChecked/?' },
-          { path: '/"_etag"/?' },
+          {path: '/hash/?'},
+          {path: '/major/?'},
+          {path: '/lastChecked/?'},
+          {path: '/"_etag"/?'},
         ],
       },
     });

@@ -5,7 +5,7 @@
  */
 
 import * as express from 'express';
-import { CosmosClient } from '@azure/cosmos';
+import {CosmosClient} from '@azure/cosmos';
 import ServerConfig from './ServerConfig';
 import HTTPError from './exceptions/HTTPError';
 import tncRouter from './routes/tnc';
@@ -79,12 +79,12 @@ export default class ExpressServer {
           console.error(err);
           err = new HTTPError(500, 'Server Error');
         }
-        res.status((err as HTTPError).statusCode).json({ error: err.message });
+        res.status((err as HTTPError).statusCode).json({error: err.message});
       }
     );
 
     this.app.use((_req, res) => {
-      res.status(404).send({ error: 'Not Found' });
+      res.status(404).send({error: 'Not Found'});
     });
   }
 
