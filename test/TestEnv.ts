@@ -66,7 +66,7 @@ export default class TestEnv {
 
     // Create resources
     // termsAndCondition container
-    const containerOps = await this.dbClient.containers.create({
+    let containerOps = await this.dbClient.containers.create({
       id: 'termsAndCondition',
       indexingPolicy: {
         indexingMode: 'consistent',
@@ -78,21 +78,6 @@ export default class TestEnv {
     /* istanbul ignore next */
     if (containerOps.statusCode !== 201) {
       throw new Error(JSON.stringify(containerOps));
-    }
-
-    // majorlist container
-    const containerOps1 = await this.dbClient.containers.create({
-      id: 'majorlist',
-      indexingPolicy: {
-        indexingMode: 'consistent',
-        automatic: true,
-        includedPaths: [{path: '/*'}],
-        excludedPaths: [{path: '/content/?'}, {path: '/"_etag"/?'}],
-      },
-    });
-    /* istanbul ignore next */
-    if (containerOps1.statusCode !== 201) {
-      throw new Error(JSON.stringify(containerOps1));
     }
 
     // termsAndCondition data
@@ -123,37 +108,67 @@ export default class TestEnv {
         .items.create(termsAndConditionSamples[index]);
     }
 
+    // majorList container
+    containerOps = await this.dbClient.containers.create({
+      id: 'majorList',
+      indexingPolicy: {
+        indexingMode: 'consistent',
+        automatic: true,
+        includedPaths: [{path: '/*'}],
+        excludedPaths: [
+          {path: '/hash/?'},
+          {path: '/major/?'},
+          {path: '/lastChecked/?'},
+          {path: '/"_etag"/?'},
+        ],
+      },
+    });
+    /* istanbul ignore next */
+    if (containerOps.statusCode !== 201) {
+      throw new Error(JSON.stringify(containerOps));
+    }
+
     // majorlist data
     const majorlistSamples: MajorList[] = [];
-    // wisc.edu, randomhashstring, 2021-01-02, ["Computer Science", "ECE", "Animal Science", "Physics"]
+    // wisc.edu, 2021-01-02, ["Computer Science", "ECE", "Animal Science", "Physics"]
+    let id = 'wisc.edu';
+    let major = ['Computer Science', 'ECE', 'Animal Science', 'Physics'].sort();
+    let lastChecked = new Date('2021-01-02T10:15:42.000Z');
     majorlistSamples.push(
-      new MajorList('wisc.edu', 'randomhashstring', new Date('2021-01-02'), [
-        'Computer Science',
-        'ECE',
-        'Animal Science',
-        'Physics',
-      ])
+      new MajorList(
+        id,
+        TestConfig.hash(id, lastChecked.toISOString(), JSON.stringify(major)),
+        lastChecked,
+        major
+      )
     );
-    // uw.edu, superhashstring, 2022-03-12, ["Computer Science", "ECE", "Math"]
+    // uw.edu, 2022-03-12, ["Computer Science", "ECE", "Math"]
+    id = 'uw.edu';
+    major = ['Computer Science', 'ECE', 'Math'].sort();
+    lastChecked = new Date('2022-03-12T10:15:42.000Z');
     majorlistSamples.push(
-      new MajorList('uw.edu', 'superhashstring', new Date('2022-03-12'), [
-        'Computer Science',
-        'ECE',
-        'Math',
-      ])
+      new MajorList(
+        id,
+        TestConfig.hash(id, lastChecked.toISOString(), JSON.stringify(major)),
+        lastChecked,
+        major
+      )
     );
-    // liberty.edu, hashhash, 2022-09-21, ["Computer Science", "ECE", "Math", "Physics"]
+    // liberty.edu, 2022-09-21, ["Computer Science", "ECE", "Math", "Physics"]
+    id = 'liberty.edu';
+    major = ['Computer Science', 'ECE', 'Math', 'Physics'].sort();
+    lastChecked = new Date('2022-09-21T10:15:42.000Z');
     majorlistSamples.push(
-      new MajorList('liberty.edu', 'hashhash', new Date('2022-09-21'), [
-        'Computer Science',
-        'ECE',
-        'Math',
-        'Physics',
-      ])
+      new MajorList(
+        id,
+        TestConfig.hash(id, lastChecked.toISOString(), JSON.stringify(major)),
+        lastChecked,
+        major
+      )
     );
     for (let index = 0; index < majorlistSamples.length; ++index) {
       await this.dbClient
-        .container('majorlist')
+        .container('majorList')
         .items.create(majorlistSamples[index]);
     }
 
