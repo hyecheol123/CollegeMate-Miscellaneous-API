@@ -6,8 +6,8 @@
 
 // eslint-disable-next-line node/no-unpublished-import
 import * as request from 'supertest';
-import TestEnv from '../TestEnv';
-import ExpressServer from '../../src/ExpressServer';
+import TestEnv from '../../TestEnv';
+import ExpressServer from '../../../src/ExpressServer';
 import * as Cosmos from '@azure/cosmos';
 
 describe('GET /tnc - Get Terms and Condition', () => {
