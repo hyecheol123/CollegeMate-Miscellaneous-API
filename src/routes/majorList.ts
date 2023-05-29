@@ -13,11 +13,11 @@ import {validateMajorListGetRequest} from '../functions/inputValidator/validateM
 import ForbiddenError from '../exceptions/ForbiddenError';
 import BadRequestError from '../exceptions/BadRequestError';
 
-// Path: /majorlist
-const majorlistRouter = express.Router();
+// Path: /majorList
+const majorListRouter = express.Router();
 
-// GET: /majorlist
-majorlistRouter.get('/', async (req, res, next) => {
+// GET: /majorList
+majorListRouter.get('/', async (req, res, next) => {
   const dbClient: Cosmos.Database = req.app.locals.dbClient;
 
   try {
@@ -38,11 +38,11 @@ majorlistRouter.get('/', async (req, res, next) => {
     const id: string = (req.body as MajorListGetRequestObj).schoolDomain;
 
     // DB Operations
-    const majorlist = await MajorList.read(dbClient, id);
+    const majorList = await MajorList.read(dbClient, id);
 
     // Response
     const resObj: MajorListResponseObj = {
-      majorList: majorlist.major,
+      majorList: majorList.major,
     };
     res.status(200).json(resObj);
   } catch (e) {
@@ -50,4 +50,4 @@ majorlistRouter.get('/', async (req, res, next) => {
   }
 });
 
-export default majorlistRouter;
+export default majorListRouter;

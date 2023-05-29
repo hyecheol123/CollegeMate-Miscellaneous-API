@@ -10,7 +10,7 @@ import ServerConfig from './ServerConfig';
 import HTTPError from './exceptions/HTTPError';
 import tncRouter from './routes/tnc';
 import announcementRouter from './routes/announcement';
-import majorlistRouter from './routes/majorlist';
+import majorlistRouter from './routes/majorList';
 
 /**
  * Class contains Express Application and other relevant instances/functions
