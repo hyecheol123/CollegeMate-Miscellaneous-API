@@ -6,9 +6,8 @@
  */
 
 /**
- * Interface for MajorListResponseObj
+ * Interface for MajorListGetResponseObj
  */
-export default interface MajorListResponseObj {
-    majorlist: string[];
-  }
-  
+export default interface MajorListGetResponseObj {
+  majorList: string[];
+}

@@ -8,20 +8,15 @@ import * as Cosmos from '@azure/cosmos';
 import NotFoundError from '../../exceptions/NotFoundError';
 
 // DB Container id
-const MAJORLIST = 'majorlist';
+const MAJORLIST = 'majorList';
 
 export default class MajorList {
   id: string; // indicates school domain
   hash: string;
-  lastChecked: Date;
+  lastChecked: Date | string;
   major: string[];
 
-  constructor(
-    id: string,
-    hash: string,
-    lastChecked: Date,
-    major: string[]
-  ) {
+  constructor(id: string, hash: string, lastChecked: Date, major: string[]) {
     this.id = id;
     this.hash = hash;
     this.lastChecked = lastChecked;
@@ -34,18 +29,12 @@ export default class MajorList {
    * @param {Cosmos.Database} dbClient Cosmos DB Client
    * @param {string} id school domain
    */
-  static async read(
-    dbClient: Cosmos.Database,
-    id: string
-  ): Promise<MajorList> {
+  static async read(dbClient: Cosmos.Database, id: string): Promise<MajorList> {
     let dbOps;
 
     try {
       // Query that finds id with school domain
-      dbOps = await dbClient
-      .container(MAJORLIST)
-      .item(id)
-      .read();
+      dbOps = await dbClient.container(MAJORLIST).item(id).read();
     } catch (e) {
       // Check if item exists
       if ((e as Cosmos.ErrorResponse).code === 404) {

@@ -6,11 +6,12 @@
 
 import * as express from 'express';
 import * as Cosmos from '@azure/cosmos';
-import MajorList from '../datatypes/majorlist/MajorList';
-import MajorListResponseObj from '../datatypes/majorlist/MajorListResponseObj';
+import MajorList from '../datatypes/majorList/MajorList';
+import MajorListResponseObj from '../datatypes/majorList/MajorListGetResponseObj';
+import MajorListGetRequestObj from '../datatypes/majorList/MajorListGetRequestObj';
+import {validateMajorListGetRequest} from '../functions/inputValidator/validateMajorListGetRequest';
 import ForbiddenError from '../exceptions/ForbiddenError';
 import BadRequestError from '../exceptions/BadRequestError';
-import {validateMajorListRequest} from '../functions/inputValidator/validateMajorListRequest';
 
 // Path: /majorlist
 const majorlistRouter = express.Router();
@@ -27,21 +28,21 @@ majorlistRouter.get('/', async (req, res, next) => {
     ) {
       throw new ForbiddenError();
     }
-    
+
     // if school domain is not provided
-    if (!validateMajorListRequest(req.body as {schoolDomain: string})) {
+    if (!validateMajorListGetRequest(req.body as MajorListGetRequestObj)) {
       throw new BadRequestError();
     }
     // TODO: Change this to appropriate id (placeholder for now)
     // need to update API Documentation for schoolDomain
-    const id: string = (req.body as {schoolDomain: string}).schoolDomain;
+    const id: string = (req.body as MajorListGetRequestObj).schoolDomain;
 
     // DB Operations
     const majorlist = await MajorList.read(dbClient, id);
 
     // Response
     const resObj: MajorListResponseObj = {
-      majorlist: majorlist.major,
+      majorList: majorlist.major,
     };
     res.status(200).json(resObj);
   } catch (e) {

@@ -25,7 +25,7 @@ export default class ExpressServer {
   constructor(config: ServerConfig) {
     // Setup Express Application
     this.app = express();
-    this.app.use(express.json()); // for parsing application/json
+
     // Create DB Connection pool and link to the express application
     this.app.locals.dbClient = new CosmosClient({
       endpoint: config.db.endpoint,
@@ -51,6 +51,9 @@ export default class ExpressServer {
         }
       }
     );
+
+    // Setup Parser
+    this.app.use(express.json());
 
     // Origin and Application Key
     this.app.set('webpageOrigin', config.webpageOrigin);

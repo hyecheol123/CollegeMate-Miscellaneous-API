@@ -6,7 +6,7 @@
 
 import Ajv from 'ajv';
 
-export const validateMajorListRequest = new Ajv().compile({
+export const validateMajorListGetRequest = new Ajv().compile({
   type: 'object',
   properties: {
     schoolDomain: {

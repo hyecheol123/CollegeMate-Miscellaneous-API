@@ -15,7 +15,7 @@ import * as Cosmos from '@azure/cosmos';
 import TestConfig from './TestConfig';
 import ExpressServer from '../src/ExpressServer';
 import TnC from '../src/datatypes/termsAndCondition/TnC';
-import MajorList from '../src/datatypes/majorlist/MajorList';
+import MajorList from '../src/datatypes/majorList/MajorList';
 
 /**
  * Class for Test Environment
@@ -127,15 +127,29 @@ export default class TestEnv {
     const majorlistSamples: MajorList[] = [];
     // wisc.edu, randomhashstring, 2021-01-02, ["Computer Science", "ECE", "Animal Science", "Physics"]
     majorlistSamples.push(
-      new MajorList('wisc.edu', 'randomhashstring', new Date('2021-01-02'), ['Computer Science', 'ECE', 'Animal Science', 'Physics'])
+      new MajorList('wisc.edu', 'randomhashstring', new Date('2021-01-02'), [
+        'Computer Science',
+        'ECE',
+        'Animal Science',
+        'Physics',
+      ])
     );
     // uw.edu, superhashstring, 2022-03-12, ["Computer Science", "ECE", "Math"]
     majorlistSamples.push(
-      new MajorList('uw.edu', 'superhashstring', new Date('2022-03-12'), [ 'Computer Science', 'ECE', 'Math' ])
+      new MajorList('uw.edu', 'superhashstring', new Date('2022-03-12'), [
+        'Computer Science',
+        'ECE',
+        'Math',
+      ])
     );
     // liberty.edu, hashhash, 2022-09-21, ["Computer Science", "ECE", "Math", "Physics"]
     majorlistSamples.push(
-      new MajorList('liberty.edu', 'hashhash', new Date('2022-09-21'), [ 'Computer Science', 'ECE', 'Math', 'Physics' ])
+      new MajorList('liberty.edu', 'hashhash', new Date('2022-09-21'), [
+        'Computer Science',
+        'ECE',
+        'Math',
+        'Physics',
+      ])
     );
     for (let index = 0; index < majorlistSamples.length; ++index) {
       await this.dbClient
