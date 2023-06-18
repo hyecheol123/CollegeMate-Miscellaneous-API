@@ -63,6 +63,14 @@ majorListRouter.post('/', async (req, res, next) => {
   const dbClient: Cosmos.Database = req.app.locals.dbClient;
 
   try {
+    // Header check - serverAdminKey
+    const serverAdminToken = req.header('X-SERVER-TOKEN');
+    if (serverAdminToken !== undefined) {
+      verifyServerAdminToken(serverAdminToken, req.app.get('jwtAccessKey'));
+    } else {
+      throw new UnauthenticatedError();
+    }
+
     let metaData: MetaData[];
     // Check forceUpdate tag from request json
     if (validateMajorListPostRequest(req.body as MajorListPostRequestObj)) {
@@ -76,14 +84,6 @@ majorListRouter.post('/', async (req, res, next) => {
       }
     } else {
       throw new BadRequestError();
-    }
-
-    // Header check - serverAdminKey
-    const serverAdminToken = req.header('X-SERVER-TOKEN');
-    if (serverAdminToken !== undefined) {
-      verifyServerAdminToken(serverAdminToken, req.app.get('jwtAccessKey'));
-    } else {
-      throw new UnauthenticatedError();
     }
 
     // Response - WebScraping might take a long time
