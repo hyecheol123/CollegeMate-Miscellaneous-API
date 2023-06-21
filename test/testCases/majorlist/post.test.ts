@@ -212,6 +212,9 @@ describe('POST /majorlist - Update Major List', () => {
     );
     await testEnv.dbClient.container('majorList').items.create(majorList);
 
+    // Wait 10ms for updated lastChecked to be different from the previous one
+    await new Promise(resolve => setTimeout(resolve, 10));
+
     // Request with forceUpdate
     const response = await request(testEnv.expressServer.app)
       .post('/majorlist')
