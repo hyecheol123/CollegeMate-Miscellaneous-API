@@ -6,7 +6,10 @@
 
 // eslint-disable-next-line node/no-unpublished-import
 import * as request from 'supertest';
+import * as Cosmos from '@azure/cosmos';
+import MajorList from '../../../src/datatypes/majorList/MajorList';
 import TestEnv from '../../TestEnv';
+import TestConfig from '../../TestConfig';
 import ExpressServer from '../../../src/ExpressServer';
 
 describe('GET /majorlist - Get Major List', () => {
@@ -18,6 +21,54 @@ describe('GET /majorlist - Get Major List', () => {
 
     // Start Test Environment
     await testEnv.start();
+
+    // Setup Express Server
+    testEnv.expressServer = testEnv.expressServer as ExpressServer;
+    testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
+
+    // majorlist data
+    const majorlistSamples: MajorList[] = [];
+    // boston.edu, 2021-01-02, ["Computer Science", "ECE", "Animal Science", "Physics"]
+    let id = 'boston.edu';
+    let major = ['Computer Science', 'ECE', 'Animal Science', 'Physics'].sort();
+    let lastChecked = new Date('2021-01-02T10:15:42.000Z');
+    majorlistSamples.push(
+      new MajorList(
+        id,
+        TestConfig.hash(id, id, JSON.stringify(major)),
+        lastChecked,
+        major
+      )
+    );
+    // uw.edu, 2022-03-12, ["Computer Science", "ECE", "Math"]
+    id = 'uw.edu';
+    major = ['Computer Science', 'ECE', 'Math'].sort();
+    lastChecked = new Date('2022-03-12T10:15:42.000Z');
+    majorlistSamples.push(
+      new MajorList(
+        id,
+        TestConfig.hash(id, id, JSON.stringify(major)),
+        lastChecked,
+        major
+      )
+    );
+    // liberty.edu, 2022-09-21, ["Computer Science", "ECE", "Math", "Physics"]
+    id = 'liberty.edu';
+    major = ['Computer Science', 'ECE', 'Math', 'Physics'].sort();
+    lastChecked = new Date('2022-09-21T10:15:42.000Z');
+    majorlistSamples.push(
+      new MajorList(
+        id,
+        TestConfig.hash(id, id, JSON.stringify(major)),
+        lastChecked,
+        major
+      )
+    );
+    for (let index = 0; index < majorlistSamples.length; ++index) {
+      await testEnv.dbClient
+        .container('majorList')
+        .items.create(majorlistSamples[index]);
+    }
   });
 
   afterEach(async () => await testEnv.stop());
@@ -63,7 +114,7 @@ describe('GET /majorlist - Get Major List', () => {
     const response = await request(testEnv.expressServer.app)
       .get('/majorlist')
       .set({Origin: 'https://collegemate.app'})
-      .send({schoolDomain: 'wisc.edu', additionalProperty: 'additional'});
+      .send({schoolDomain: 'boston.edu', additionalProperty: 'additional'});
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Bad Request');
   });
@@ -75,7 +126,7 @@ describe('GET /majorlist - Get Major List', () => {
     const response = await request(testEnv.expressServer.app)
       .get('/majorlist')
       .set({Origin: 'https://collegemate.app'})
-      .send({schoolDomainAbc: 'wisc.edu'});
+      .send({schoolDomainAbc: 'boston.edu'});
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Bad Request');
   });
@@ -99,7 +150,7 @@ describe('GET /majorlist - Get Major List', () => {
     let response = await request(testEnv.expressServer.app)
       .get('/majorlist')
       .set({Origin: 'https://collegemate.app'})
-      .send({schoolDomain: 'wisc.edu'});
+      .send({schoolDomain: 'boston.edu'});
     expect(response.status).toBe(200);
     expect(response.body.majorList.length).toBe(4);
     expect(response.body.majorList[0]).toBe('Animal Science');
@@ -136,7 +187,7 @@ describe('GET /majorlist - Get Major List', () => {
     let response = await request(testEnv.expressServer.app)
       .get('/majorlist')
       .set({'X-APPLICATION-KEY': '<Android-App-v1>'})
-      .send({schoolDomain: 'wisc.edu'});
+      .send({schoolDomain: 'boston.edu'});
     expect(response.status).toBe(200);
     expect(response.body.majorList.length).toBe(4);
     expect(response.body.majorList[0]).toBe('Animal Science');

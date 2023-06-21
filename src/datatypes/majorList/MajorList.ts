@@ -84,8 +84,7 @@ export default class MajorList {
         .container(MAJORLIST)
         .items.query<MetaData>({
           query: String.prototype.concat(
-            'SELECT c.id, c.hash, c.lastChecked',
-            `FROM ${MAJORLIST} as a ORDER BY a.generatedAt`
+            'SELECT c.id, c.hash, c.lastChecked FROM c'
           ),
         })
         .fetchAll()
@@ -112,6 +111,7 @@ export default class MajorList {
       .container(MAJORLIST)
       .item(id)
       .replace({
+        id: id,
         hash: ServerConfig.hash(id, id, JSON.stringify(majorList)),
         lastChecked: lastChecked.toISOString(),
         major: majorList,

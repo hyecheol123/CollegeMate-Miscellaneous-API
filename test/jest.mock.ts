@@ -9,19 +9,17 @@
 jest.mock('../src/functions/majorListCrawler/crawlMajorList', () => ({
   __esModule: true,
   default: jest.fn(async () => {
-    return {
-      major: [
-        'Computer Science',
-        'Chemistry',
-        'Physics',
-        'Mathematics',
-        'Biology',
-        'Economics',
-        'Psychology',
-        'English',
-        'History',
-        'Sociology',
-      ],
-    };
+    return [
+      'Computer Science',
+      'Chemistry',
+      'Physics',
+      'Mathematics',
+      'Biology',
+      'Economics',
+      'Psychology',
+      'English',
+      'History',
+      'Sociology',
+    ].sort();
   }),
 }));
