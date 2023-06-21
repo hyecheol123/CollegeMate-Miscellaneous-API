@@ -11,6 +11,7 @@
 export interface ConfigObj {
   db: DbObj; // contain database configuration parameters
   expressPort: number; // indicate express server port
+  jwtKeys: JwtKeyObj; // indicate jwt token credentials
   webpageOrigin: string; // indicate our website Origin
   applicationKey: string[]; // Indicate the list of applicationKey (Mobile Application Origin Check)
 }
@@ -23,4 +24,12 @@ export interface DbObj {
   endpoint: string; // URL indicating the location of database server and port
   key: string;
   databaseId: string; // default database name
+}
+
+/**
+ * Interface to define jwtKeyObj object
+ * This type of object should be contained in the ConfigObj
+ */
+export interface JwtKeyObj {
+  secretKey: string; // key that used to validate the token
 }

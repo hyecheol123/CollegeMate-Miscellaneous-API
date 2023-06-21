@@ -16,7 +16,6 @@ import * as Cosmos from '@azure/cosmos';
 import TestConfig from './TestConfig';
 import ExpressServer from '../src/ExpressServer';
 import TnC from '../src/datatypes/termsAndCondition/TnC';
-import MajorList from '../src/datatypes/majorList/MajorList';
 import Announcement from '../src/datatypes/announcement/Announcement';
 
 /**
@@ -245,49 +244,7 @@ export default class TestEnv {
       throw new Error(JSON.stringify(containerOps));
     }
 
-    // majorlist data
-    const majorlistSamples: MajorList[] = [];
-    // wisc.edu, 2021-01-02, ["Computer Science", "ECE", "Animal Science", "Physics"]
-    let id = 'wisc.edu';
-    let major = ['Computer Science', 'ECE', 'Animal Science', 'Physics'].sort();
-    let lastChecked = new Date('2021-01-02T10:15:42.000Z');
-    majorlistSamples.push(
-      new MajorList(
-        id,
-        TestConfig.hash(id, lastChecked.toISOString(), JSON.stringify(major)),
-        lastChecked,
-        major
-      )
-    );
-    // uw.edu, 2022-03-12, ["Computer Science", "ECE", "Math"]
-    id = 'uw.edu';
-    major = ['Computer Science', 'ECE', 'Math'].sort();
-    lastChecked = new Date('2022-03-12T10:15:42.000Z');
-    majorlistSamples.push(
-      new MajorList(
-        id,
-        TestConfig.hash(id, lastChecked.toISOString(), JSON.stringify(major)),
-        lastChecked,
-        major
-      )
-    );
-    // liberty.edu, 2022-09-21, ["Computer Science", "ECE", "Math", "Physics"]
-    id = 'liberty.edu';
-    major = ['Computer Science', 'ECE', 'Math', 'Physics'].sort();
-    lastChecked = new Date('2022-09-21T10:15:42.000Z');
-    majorlistSamples.push(
-      new MajorList(
-        id,
-        TestConfig.hash(id, lastChecked.toISOString(), JSON.stringify(major)),
-        lastChecked,
-        major
-      )
-    );
-    for (let index = 0; index < majorlistSamples.length; ++index) {
-      await this.dbClient
-        .container('majorList')
-        .items.create(majorlistSamples[index]);
-    }
+    // majorlist data will be added by the test
 
     // Setup Express Server
     this.expressServer = new ExpressServer(this.testConfig);
