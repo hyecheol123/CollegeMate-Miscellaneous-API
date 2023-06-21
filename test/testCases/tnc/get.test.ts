@@ -50,12 +50,24 @@ describe('GET /tnc - Get Terms and Condition', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
 
     // Request from Application
-    const response = await request(testEnv.expressServer.app)
+    let response = await request(testEnv.expressServer.app)
       .get('/tnc')
       .set({Origin: 'https://collegemate.app'});
     expect(response.status).toBe(200);
     expect(response.body.version).toBe('v2.0.0');
-    const createdAt = new Date(response.body.createdAt);
+    let createdAt = new Date(response.body.createdAt);
+    expect(createdAt.getFullYear()).toBe(2023);
+    expect(createdAt.getMonth()).toBe(2);
+    expect(createdAt.getDate()).toBe(12);
+    expect(response.body.content).toBe('Terms and Condition');
+
+    // Request
+    response = await request(testEnv.expressServer.app)
+      .get('/tnc')
+      .set({'X-APPLICATION-KEY': '<API-Servers>'});
+    expect(response.status).toBe(200);
+    expect(response.body.version).toBe('v2.0.0');
+    createdAt = new Date(response.body.createdAt);
     expect(createdAt.getFullYear()).toBe(2023);
     expect(createdAt.getMonth()).toBe(2);
     expect(createdAt.getDate()).toBe(12);
@@ -66,12 +78,24 @@ describe('GET /tnc - Get Terms and Condition', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
 
     // Request from Application
-    const response = await request(testEnv.expressServer.app)
+    let response = await request(testEnv.expressServer.app)
       .get('/tnc')
       .set({'X-APPLICATION-KEY': '<Android-App-v1>'});
     expect(response.status).toBe(200);
     expect(response.body.version).toBe('v2.0.0');
-    const createdAt = new Date(response.body.createdAt);
+    let createdAt = new Date(response.body.createdAt);
+    expect(createdAt.getFullYear()).toBe(2023);
+    expect(createdAt.getMonth()).toBe(2);
+    expect(createdAt.getDate()).toBe(12);
+    expect(response.body.content).toBe('Terms and Condition');
+
+    // Request
+    response = await request(testEnv.expressServer.app)
+      .get('/tnc')
+      .set({'X-APPLICATION-KEY': '<API-Servers>'});
+    expect(response.status).toBe(200);
+    expect(response.body.version).toBe('v2.0.0');
+    createdAt = new Date(response.body.createdAt);
     expect(createdAt.getFullYear()).toBe(2023);
     expect(createdAt.getMonth()).toBe(2);
     expect(createdAt.getDate()).toBe(12);
