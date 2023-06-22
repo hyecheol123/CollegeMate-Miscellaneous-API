@@ -101,3 +101,8 @@ Configuration of `announcement` Collection
 
 [Express](https://expressjs.com/) is a web framework for node.js.
 This project used it to develop and maintain APIs more conveniently.
+
+[ajv](https://ajv.js.org/) is used for runtime type checks.
+
+[Selenium](https://www.selenium.dev/) is used for web crawling, specifically for retrieving major lists of each school.
+We are using [Chrome Driver](https://chromedriver.chromium.org/downloads), so we need matching version of Chrome.
