@@ -58,12 +58,3 @@ export default async function crawlMajorList(): Promise<string[]> {
     await driver.quit();
   }
 }
-
-// (async () => {
-//   try {
-//     const majorListArray = await crawlMajorList.create();
-//     console.log(majorListArray);
-//   } catch (error) {
-//     console.error('An error occurred:', error);
-//   }
-// })();

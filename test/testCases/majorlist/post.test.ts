@@ -9,7 +9,6 @@ import * as request from 'supertest';
 import * as Cosmos from '@azure/cosmos';
 import TestEnv from '../../TestEnv';
 import ExpressServer from '../../../src/ExpressServer';
-import createServerAdminToken from '../../../src/functions/JWT/createServerAdminToken';
 import AuthToken from '../../../src/datatypes/Token/AuthToken';
 import * as jwt from 'jsonwebtoken';
 import TestConfig from '../../TestConfig';
@@ -104,10 +103,21 @@ describe('POST /majorlist - Update Major List', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
     testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
 
-    const serverAdminToken = createServerAdminToken(
-      'test',
-      'admin',
-      testEnv.testConfig.jwt.secretKey
+    const tokenContent: AuthToken = {
+      id: 'test',
+      type: 'access',
+      tokenType: 'serverAdmin',
+      accountType: 'admin',
+    };
+
+    // Generate AccessToken
+    const serverAdminToken = jwt.sign(
+      tokenContent,
+      testEnv.testConfig.jwt.secretKey,
+      {
+        algorithm: 'HS512',
+        expiresIn: '60m',
+      }
     );
 
     // Request with no body
@@ -144,10 +154,21 @@ describe('POST /majorlist - Update Major List', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
     testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
 
-    const serverAdminToken = createServerAdminToken(
-      'test',
-      'admin',
-      testEnv.testConfig.jwt.secretKey
+    const tokenContent: AuthToken = {
+      id: 'test',
+      type: 'access',
+      tokenType: 'serverAdmin',
+      accountType: 'admin',
+    };
+
+    // Generate AccessToken
+    const serverAdminToken = jwt.sign(
+      tokenContent,
+      testEnv.testConfig.jwt.secretKey,
+      {
+        algorithm: 'HS512',
+        expiresIn: '60m',
+      }
     );
 
     // Create majorList in the database that has not passed 5 days
@@ -185,10 +206,21 @@ describe('POST /majorlist - Update Major List', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
     testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
 
-    const serverAdminToken = createServerAdminToken(
-      'test',
-      'admin',
-      testEnv.testConfig.jwt.secretKey
+    const tokenContent: AuthToken = {
+      id: 'test',
+      type: 'access',
+      tokenType: 'serverAdmin',
+      accountType: 'admin',
+    };
+
+    // Generate AccessToken
+    const serverAdminToken = jwt.sign(
+      tokenContent,
+      testEnv.testConfig.jwt.secretKey,
+      {
+        algorithm: 'HS512',
+        expiresIn: '60m',
+      }
     );
 
     // Create multiple majorList in the database to see if wisc.edu is updated
@@ -248,10 +280,21 @@ describe('POST /majorlist - Update Major List', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
     testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
 
-    const serverAdminToken = createServerAdminToken(
-      'test',
-      'admin',
-      testEnv.testConfig.jwt.secretKey
+    const tokenContent: AuthToken = {
+      id: 'test',
+      type: 'access',
+      tokenType: 'serverAdmin',
+      accountType: 'admin',
+    };
+
+    // Generate AccessToken
+    const serverAdminToken = jwt.sign(
+      tokenContent,
+      testEnv.testConfig.jwt.secretKey,
+      {
+        algorithm: 'HS512',
+        expiresIn: '60m',
+      }
     );
 
     // Create majorList in the database for test
@@ -303,10 +346,21 @@ describe('POST /majorlist - Update Major List', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
     testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
 
-    const serverAdminToken = createServerAdminToken(
-      'test',
-      'admin',
-      testEnv.testConfig.jwt.secretKey
+    const tokenContent: AuthToken = {
+      id: 'test',
+      type: 'access',
+      tokenType: 'serverAdmin',
+      accountType: 'admin',
+    };
+
+    // Generate AccessToken
+    const serverAdminToken = jwt.sign(
+      tokenContent,
+      testEnv.testConfig.jwt.secretKey,
+      {
+        algorithm: 'HS512',
+        expiresIn: '60m',
+      }
     );
 
     // Request with forceUpdate = false
@@ -345,10 +399,21 @@ describe('POST /majorlist - Update Major List', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
     testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
 
-    const serverAdminToken = createServerAdminToken(
-      'test',
-      'admin',
-      testEnv.testConfig.jwt.secretKey
+    const tokenContent: AuthToken = {
+      id: 'test',
+      type: 'access',
+      tokenType: 'serverAdmin',
+      accountType: 'admin',
+    };
+
+    // Generate AccessToken
+    const serverAdminToken = jwt.sign(
+      tokenContent,
+      testEnv.testConfig.jwt.secretKey,
+      {
+        algorithm: 'HS512',
+        expiresIn: '60m',
+      }
     );
 
     // Create majorList in the database for test
@@ -404,10 +469,21 @@ describe('POST /majorlist - Update Major List', () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
     testEnv.dbClient = testEnv.dbClient as Cosmos.Database;
 
-    const serverAdminToken = createServerAdminToken(
-      'test',
-      'admin',
-      testEnv.testConfig.jwt.secretKey
+    const tokenContent: AuthToken = {
+      id: 'test',
+      type: 'access',
+      tokenType: 'serverAdmin',
+      accountType: 'admin',
+    };
+
+    // Generate AccessToken
+    const serverAdminToken = jwt.sign(
+      tokenContent,
+      testEnv.testConfig.jwt.secretKey,
+      {
+        algorithm: 'HS512',
+        expiresIn: '60m',
+      }
     );
 
     // Prepare majorList in the database for test
