@@ -46,6 +46,22 @@ describe('GET /tnc - Get Terms and Condition', () => {
     expect(response.body.error).toBe('Forbidden');
   });
 
+  test('Success - Request from API-Server', async () => {
+    testEnv.expressServer = testEnv.expressServer as ExpressServer;
+
+    // Request from API-Server
+    const response = await request(testEnv.expressServer.app)
+      .get('/tnc')
+      .set({'X-APPLICATION-KEY': '<API-Servers>'});
+    expect(response.status).toBe(200);
+    expect(response.body.version).toBe('v2.0.0');
+    const createdAt = new Date(response.body.createdAt);
+    expect(createdAt.getFullYear()).toBe(2023);
+    expect(createdAt.getMonth()).toBe(2);
+    expect(createdAt.getDate()).toBe(12);
+    expect(response.body.content).toBe('Terms and Condition');
+  });
+
   test('Success - Request from collegemate.app', async () => {
     testEnv.expressServer = testEnv.expressServer as ExpressServer;
 

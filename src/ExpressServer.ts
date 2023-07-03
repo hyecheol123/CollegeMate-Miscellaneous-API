@@ -33,6 +33,9 @@ export default class ExpressServer {
       key: config.db.key,
     }).database(config.db.databaseId);
 
+    // JWT Keys
+    this.app.set('jwtAccessKey', config.jwt.secretKey);
+
     // Only Allow GET, POST, DELETE, PUT, PATCH method
     this.app.use(
       (

@@ -7,7 +7,7 @@
  */
 
 import {BinaryLike} from 'crypto';
-import {ConfigObj, DbObj} from './datatypes/ConfigObj';
+import {ConfigObj, DbObj, JwtKeyObj} from './datatypes/ConfigObj';
 
 /**
  * Module contains the configuration
@@ -16,6 +16,7 @@ import {ConfigObj, DbObj} from './datatypes/ConfigObj';
 export default abstract class ServerConfigTemplate {
   readonly db: DbObj;
   readonly expressPort: number;
+  readonly jwt: JwtKeyObj;
   readonly applicationKey: string[];
   readonly webpageOrigin: string;
 
@@ -27,6 +28,7 @@ export default abstract class ServerConfigTemplate {
   protected constructor(config: ConfigObj) {
     this.db = config.db;
     this.expressPort = config.expressPort;
+    this.jwt = config.jwtKeys;
     this.applicationKey = config.applicationKey;
     this.webpageOrigin = config.webpageOrigin;
   }
