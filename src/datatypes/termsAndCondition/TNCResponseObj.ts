@@ -2,9 +2,12 @@
  * Define type for TNC Response
  *  - version
  *  - createdAt
- *  - content
+ *  - content:
+ *    - privacyAct
+ *    - termsAndConditions
  *
  * @author Hyecheol (Jerry) Jang <hyecheol123@gmail.com>
+ * @author Seok-Hee (Steve) Han <seokheehan01@gmail.com>
  */
 
 /**
@@ -13,5 +16,8 @@
 export default interface TNCResponseObj {
   version: string;
   createdAt: string;
-  content: string;
+  content: {
+    privacyAct: string;
+    termsAndConditions: string;
+  };
 }

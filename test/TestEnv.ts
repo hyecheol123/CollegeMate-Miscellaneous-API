@@ -68,12 +68,12 @@ export default class TestEnv {
     // Create resources
     // termsAndCondition container
     let containerOps = await this.dbClient.containers.create({
-      id: 'termsAndCondition',
+      id: 'termsAndConditions',
       indexingPolicy: {
         indexingMode: 'consistent',
         automatic: true,
         includedPaths: [{path: '/*'}],
-        excludedPaths: [{path: '/content/?'}, {path: '/"_etag"/?'}],
+        excludedPaths: [{path: '/content/*'}, {path: '/"_etag"/?'}],
       },
     });
     /* istanbul ignore next */
@@ -82,31 +82,55 @@ export default class TestEnv {
     }
 
     // termsAndCondition data
-    const termsAndConditionSamples: TnC[] = [];
+    const termsAndConditionsSamples: TnC[] = [];
     // v1.0.0, 2021-03-10, public, "This is too old"
     let tncTimestamp = new Date('2021-03-10T10:50:43.000Z');
-    termsAndConditionSamples.push(
-      new TnC('v1.0.0', tncTimestamp, true, 'This is too old')
+    termsAndConditionsSamples.push(
+      new TnC(
+        'v1.0.0',
+        tncTimestamp,
+        true,
+        'This is too old',
+        'This is too old'
+      )
     );
     // v1.0.2, 2021-03-12, private, "This is too old, not public"
     tncTimestamp = new Date('2021-03-12T10:15:42.000Z');
-    termsAndConditionSamples.push(
-      new TnC('v1.0.2', tncTimestamp, false, 'This is too old, not public')
+    termsAndConditionsSamples.push(
+      new TnC(
+        'v1.0.2',
+        tncTimestamp,
+        false,
+        'This is too old, not public',
+        'This is too old, not public'
+      )
     );
     // v2.0.0, 2023-03-12, public, "Terms and Condition"
     tncTimestamp = new Date('2023-03-12T10:15:42.000Z');
-    termsAndConditionSamples.push(
-      new TnC('v2.0.0', tncTimestamp, true, 'Terms and Condition')
+    termsAndConditionsSamples.push(
+      new TnC(
+        'v2.0.0',
+        tncTimestamp,
+        true,
+        'Privacy Act',
+        'Terms and Condition'
+      )
     );
     // v2.0.1, 2023-03-15, private, "This is not public"
     tncTimestamp = new Date('2023-03-15T10:15:42.000Z');
-    termsAndConditionSamples.push(
-      new TnC('v2.0.1', tncTimestamp, false, 'This is not public')
+    termsAndConditionsSamples.push(
+      new TnC(
+        'v2.0.1',
+        tncTimestamp,
+        false,
+        'This is not public',
+        'This is not public'
+      )
     );
-    for (let index = 0; index < termsAndConditionSamples.length; ++index) {
+    for (let index = 0; index < termsAndConditionsSamples.length; ++index) {
       await this.dbClient
-        .container('termsAndCondition')
-        .items.create(termsAndConditionSamples[index]);
+        .container('termsAndConditions')
+        .items.create(termsAndConditionsSamples[index]);
     }
 
     // announcement container
