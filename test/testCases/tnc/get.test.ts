@@ -59,7 +59,10 @@ describe('GET /tnc - Get Terms and Condition', () => {
     expect(createdAt.getFullYear()).toBe(2023);
     expect(createdAt.getMonth()).toBe(2);
     expect(createdAt.getDate()).toBe(12);
-    expect(response.body.content).toBe('Terms and Condition');
+    expect(response.body.content.privacyAct).toBe('Privacy Act');
+    expect(response.body.content.termsAndConditions).toBe(
+      'Terms and Condition'
+    );
   });
 
   test('Success - Request from collegemate.app', async () => {
@@ -75,7 +78,10 @@ describe('GET /tnc - Get Terms and Condition', () => {
     expect(createdAt.getFullYear()).toBe(2023);
     expect(createdAt.getMonth()).toBe(2);
     expect(createdAt.getDate()).toBe(12);
-    expect(response.body.content).toBe('Terms and Condition');
+    expect(response.body.content.privacyAct).toBe('Privacy Act');
+    expect(response.body.content.termsAndConditions).toBe(
+      'Terms and Condition'
+    );
   });
 
   test('Success - Request from Application', async () => {
@@ -91,7 +97,10 @@ describe('GET /tnc - Get Terms and Condition', () => {
     expect(createdAt.getFullYear()).toBe(2023);
     expect(createdAt.getMonth()).toBe(2);
     expect(createdAt.getDate()).toBe(12);
-    expect(response.body.content).toBe('Terms and Condition');
+    expect(response.body.content.privacyAct).toBe('Privacy Act');
+    expect(response.body.content.termsAndConditions).toBe(
+      'Terms and Condition'
+    );
   });
 
   test('Fail - No public terms and condition', async () => {
@@ -100,11 +109,11 @@ describe('GET /tnc - Get Terms and Condition', () => {
 
     // Remove all public terms and condition from DB
     await testEnv.dbClient
-      .container('termsAndCondition')
+      .container('termsAndConditions')
       .item('v2.0.0')
       .delete();
     await testEnv.dbClient
-      .container('termsAndCondition')
+      .container('termsAndConditions')
       .item('v1.0.0')
       .delete();
 
@@ -129,19 +138,19 @@ describe('GET /tnc - Get Terms and Condition', () => {
 
     // Remove all terms and condition from DB
     await testEnv.dbClient
-      .container('termsAndCondition')
+      .container('termsAndConditions')
       .item('v2.0.0')
       .delete();
     await testEnv.dbClient
-      .container('termsAndCondition')
+      .container('termsAndConditions')
       .item('v2.0.1')
       .delete();
     await testEnv.dbClient
-      .container('termsAndCondition')
+      .container('termsAndConditions')
       .item('v1.0.0')
       .delete();
     await testEnv.dbClient
-      .container('termsAndCondition')
+      .container('termsAndConditions')
       .item('v1.0.2')
       .delete();
 

@@ -34,7 +34,10 @@ tncRouter.get('/', async (req, res, next) => {
     const resObj: TNCResponseObj = {
       version: tnc.id,
       createdAt: tnc.createdAt.toISOString(),
-      content: tnc.content,
+      content: {
+        privacyAct: tnc.content.privacyAct,
+        termsAndConditions: tnc.content.termsAndConditions,
+      },
     };
     res.status(200).json(resObj);
   } catch (e) {

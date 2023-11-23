@@ -2,45 +2,57 @@
  * Define type and used CRUD methods for each tnc entry
  *
  * @author Hyecheol (Jerry) Jang <hyecheol123@gmail.com>
+ * @author Seok-Hee (Steve) Han <seokheehan01@gmail.com>
  */
 
 import * as Cosmos from '@azure/cosmos';
 import NotFoundError from '../../exceptions/NotFoundError';
 
 // DB Container id
-const TNC = 'termsAndCondition';
+const TNC = 'termsAndConditions';
 
 interface publicTnC {
   id: string;
   createdAt: Date | string; // Saved as ISOString
-  content: string;
+  content: {
+    privacyAct: string;
+    termsAndConditions: string;
+  };
 }
 
 export default class TnC implements publicTnC {
   id: string;
   createdAt: Date | string; // Saved as ISOString
   public: boolean;
-  content: string;
+  content: {
+    privacyAct: string;
+    termsAndConditions: string;
+  };
 
   /**
    * Constructor for termsAndCondition Object
    *
    * @param id {string} version of terms and condition
    * @param createdAt {Date} specify when this Terms and Condition created
-   * @param publicFlag {boolean} indicate whether this Terms and Condition is
+   * @param publicFlag {boolean} indicate whether this Terms and Condition and Privacy Agreement is
    *     publicly available or not
-   * @param content {string} content of terms and condition
+   * @param privacyAct {string} Privacy Agreement
+   * @param termsAndConditions {string} Terms and Condition
    */
   constructor(
     id: string,
     createdAt: Date,
     publicFlag: boolean,
-    content: string
+    privacyAct: string,
+    termsAndConditions: string
   ) {
     this.id = id;
     this.createdAt = createdAt;
     this.public = publicFlag;
-    this.content = content;
+    this.content = {
+      privacyAct: privacyAct,
+      termsAndConditions: termsAndConditions,
+    };
   }
 
   /**
